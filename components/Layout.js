@@ -1,6 +1,6 @@
 import React from "react"
 
-const Layout = () => {
+const Layout = ({children}) => {
     const nav = () => (
         <ul className="nav">
             <li className="nav-item">
@@ -15,7 +15,7 @@ const Layout = () => {
         </ul>
     )
     return <React.Fragment>
-        {nav()}
+        {nav()}{children}
     </React.Fragment>
 }
 
