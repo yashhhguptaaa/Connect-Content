@@ -8,8 +8,9 @@ const app = express()
 const authRoutes = require('./routes/auth')
 
 //app middlewares
-app.use(morgan('dev'))
-app.use(cors())
+app.use(morgan('dev'));
+// app.use(cors())
+app.use(cors({origin: process.env.CLIENT_URL}));
 
 app.use('/api',authRoutes)
 
