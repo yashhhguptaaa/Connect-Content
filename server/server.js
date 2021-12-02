@@ -1,7 +1,15 @@
 const express = require('express')
+const morgan= require('morgan')
+const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config();
 
 const app = express()
 const authRoutes = require('./routes/auth')
+
+//app middlewares
+app.use(morgan('dev'))
+app.use(cors())
 
 app.use('/api',authRoutes)
 
