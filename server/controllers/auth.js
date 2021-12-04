@@ -3,6 +3,8 @@ const {registerEmailParams} = require("../helpers/email")
 
 const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken')
+const shortid = require('shortid')
+const genUsername = require("unique-username-generator");
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -50,7 +52,44 @@ exports.register = (req, res) => {
             });
 
     })
+};
 
+exports.registerActivate = (req, res) => {
+    const {token} = req.body;
+    // console.log(token)
+    jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err, decoded){
+        if(err){
+            return res.status(401).json({
+                error :'Link Expired. Try again'
+            });
+        }
 
+        const {name, email, password} = jwt.decode(token);
+        // const username = shortid.generate()
+        const username = genUsername.generateFromEmail(
+            email,
+            4
+          );
 
+        User.findOne({email}).exec((err,user) => {
+            if(user) {
+                return res.status(401).json({
+                    error: 'Email is taken'
+                })
+            }
+
+            //Register new User
+            const newUser = new User({username, name, email, password})
+            newUser.save((err,result) => {
+                if(err){
+                    return res.status(401).json({
+                        error: 'Error while saving user. Try Later'
+                    });
+                }
+                return res.json({
+                    message :'Registration Successfully Done. Please Login'
+                })
+            })
+        })
+    })
 };
