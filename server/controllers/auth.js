@@ -70,7 +70,7 @@ exports.registerActivate = (req, res) => {
             email,
             4
           );
-
+          
         User.findOne({email}).exec((err,user) => {
             if(user) {
                 return res.status(401).json({
@@ -90,6 +90,37 @@ exports.registerActivate = (req, res) => {
                     message :'Registration Successfully Done. Please Login'
                 })
             })
+        })
+    })
+};
+
+exports.login = (req, res) => {
+
+    const { email, password } = req.body;
+   
+    User.findOne({email}).exec((err,user) => {
+        if(err || !user){
+            return res.status(400).json({
+                error : 'User with this email does not exist. Please register.'
+            })
+        }
+
+        // authenticate
+        if(!user.authenticate(password)){
+            return res.status(400).json({
+                error : 'Email and Password do not match'
+            })
+        }
+
+        // generate token and send to client
+        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET, {
+            expiresIn: '7d'
+        })  
+        const {_id, name, email, role } = user;
+        
+        return res.json({
+            message : 'Logged In successfully',
+            token, user: {_id, name, email, role}
         })
     })
 };
