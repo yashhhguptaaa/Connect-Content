@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react'
 import Router from 'next/router';
 import NProgress from 'nprogress';
+import {isAuth, logout} from '../helpers/auth';
 import 'nprogress/nprogress.css'
 
 Router.onRouteChangeStart = url => NProgress.start()
@@ -42,6 +43,9 @@ const Layout = ({ children }) => {
                 <Link href="/register">
                     <a className="nav-link text-dark" >Register</a>
                 </Link>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link text-dark" onClick={logout}>Logout</a>
             </li>
         </ul>
     )
