@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken')
 const shortid = require('shortid')
 const genUsername = require("unique-username-generator");
+const expressJwt = require('express-jwt')
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -124,3 +125,5 @@ exports.login = (req, res) => {
         })
     })
 };
+
+exports.requireSignIn = expressJwt({secret : process.env.JWT_SECRET, algorithms: ['HS256']}) // req.user
