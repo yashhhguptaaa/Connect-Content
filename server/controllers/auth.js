@@ -69,7 +69,7 @@ exports.registerActivate = (req, res) => {
         // const username = shortid.generate()
         const username = genUsername.generateFromEmail(
             email,
-            4
+            1
           );
           
         User.findOne({email}).exec((err,user) => {
@@ -126,37 +126,37 @@ exports.login = (req, res) => {
     })
 };
 
-exports.requireSignIn = expressJwt({secret : process.env.JWT_SECRET, algorithms: ['HS256']}) // req.user
+exports.requireSignin = expressJwt({ secret: process.env.JWT_SECRET ,algorithms: ['HS256']}); // req.user
 
 exports.authMiddleware = (req, res, next) => {
-    const authUserId = req.user._id
-    User.findOne({_id : authUserId}).exec((err, user) => {
-        if(err || !user) {
+    const authUserId = req.user._id;
+    User.findOne({ _id: authUserId }).exec((err, user) => {
+        if (err || !user) {
             return res.status(400).json({
-                error : "User not found"
-            })
+                error: 'User not found'
+            });
         }
+        req.profile = user;
+        next();
+    });
+};
 
-        req.profile = user
-        next()
-    })
-}
 exports.adminMiddleware = (req, res, next) => {
-    const authUserId = req.user._id
-    User.findOne({_id : authUserId}).exec((err, user) => {
-        if(err || !user) {
+    const adminUserId = req.user._id;
+    User.findOne({ _id: adminUserId }).exec((err, user) => {
+        if (err || !user) {
             return res.status(400).json({
-                error : "User not found"
-            })
+                error: 'User not found'
+            });
         }
 
-        if(user.role !== 'admin'){
+        if (user.role !== 'admin') {
             return res.status(400).json({
-                error : "Admin resource. Access denied"
-            })
+                error: 'Admin resource. Access denied'
+            });
         }
 
-        req.profile = user
-        next()
-    })
-}
+        req.profile = user;
+        next();
+    });
+};
