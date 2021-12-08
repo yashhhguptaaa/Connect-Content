@@ -95,6 +95,9 @@ const Login = () => {
         {error && showErrorMessage(error)}
         <br />
         {loginForm()}
+        <Link href="/auth/password/forgot" >
+          <a className="text-danger float-end">Forgot Password</a>
+        </Link>
       </div>
     </Layout>
   );
