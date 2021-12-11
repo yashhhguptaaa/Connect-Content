@@ -17,7 +17,8 @@ mongoose
   .catch(() => console.log("some Error"));
 
 const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user")
+const userRoutes = require("./routes/user");
+const categoryRoutes = require("./routes/category");
 
 //app middlewares
 app.use(morgan("dev"));
@@ -27,6 +28,7 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server is running on port : ${port}`));
