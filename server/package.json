@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
     "shortid": "^2.2.16",
+    "slugify": "^1.6.3",
     "unique-username-generator": "^1.0.1"
   }
 }
