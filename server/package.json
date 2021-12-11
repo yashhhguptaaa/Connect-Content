@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
     "express-validator": "^6.13.0",
+    "formidable": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.0.14",
@@ -24,6 +25,7 @@
     "nodemon": "^2.0.15",
     "shortid": "^2.2.16",
     "slugify": "^1.6.3",
-    "unique-username-generator": "^1.0.1"
+    "unique-username-generator": "^1.0.1",
+    "uuid": "^8.3.2"
   }
 }
