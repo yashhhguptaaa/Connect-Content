@@ -24,7 +24,6 @@ const Create = ({ user, token }) => {
     error,
     image,
     success,
-    formData,
     buttonText,
     imageUploadText,
   } = state;
