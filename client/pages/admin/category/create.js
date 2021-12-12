@@ -1,15 +1,18 @@
+
+import dynamic from 'next/dynamic'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Resizer from "react-image-file-resizer";
+const ReactQuill = dynamic(() => import('react-quill'), {ssr: false})
 import { API } from "../../../config";
 import Layout from "../../../components/Layout";
 import withAdmin from "../../withAdmin";
 import { showSuccessMessage, showErrorMessage } from "../../../helpers/alerts";
+import 'react-quill/dist/quill.bubble.css'
 
 const Create = ({ user, token }) => {
   const [state, setState] = useState({
     name: "",
-    content: "",
     error: "",
     success: "",
     // formData: process.browser && new FormData(),
@@ -18,9 +21,10 @@ const Create = ({ user, token }) => {
     image: "",
   });
 
+  const [content, setContent] = useState('')
+
   const {
     name,
-    content,
     error,
     image,
     success,
@@ -41,6 +45,12 @@ const Create = ({ user, token }) => {
       success: "",
     });
   };
+
+  const handleContent = event => {
+      console.log("handleContent :",event)
+      setContent(event)
+      setState({...state, success: '', error: ''})
+  }
 
   const handleImage = (event) => {
     let fileInput = false;
@@ -86,11 +96,11 @@ const Create = ({ user, token }) => {
       setState({
         ...state,
         name: "",
-        content: "",
         success: `${response.data.name} is created`,
         buttonText: "Created",
         imageUploadText: "Upload image",
       });
+      setContent("");
     } catch (error) {
       console.log("CATEGORY CREATE ERROR", error);
       setState({
@@ -115,11 +125,13 @@ const Create = ({ user, token }) => {
       </div>
       <div className="form-group">
         <label className="text-muted">Content</label>
-        <textarea
-          onChange={handleChange("content")}
+        <ReactQuill 
           value={content}
-          className="form-control"
-          required
+          onChange={handleContent}
+          theme="bubble"
+          placeholder='Write something....'
+          className='pb-5 mb-3'
+          style={{border: '1px solid #666'}}
         />
       </div>
       <div className="form-group">
