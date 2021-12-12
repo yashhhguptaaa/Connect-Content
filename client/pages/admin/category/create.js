@@ -1,25 +1,28 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Resizer from "react-image-file-resizer";
 import { API } from "../../../config";
 import Layout from "../../../components/Layout";
 import withAdmin from "../../withAdmin";
 import { showSuccessMessage, showErrorMessage } from "../../../helpers/alerts";
 
-const Create = ({user, token}) => {
+const Create = ({ user, token }) => {
   const [state, setState] = useState({
     name: "",
     content: "",
     error: "",
     success: "",
-    formData: process.browser && new FormData(),
+    // formData: process.browser && new FormData(),
     buttonText: "Create",
     imageUploadText: "Upload image",
+    image: "",
   });
 
   const {
     name,
     content,
     error,
+    image,
     success,
     formData,
     buttonText,
@@ -27,34 +30,75 @@ const Create = ({user, token}) => {
   } = state;
 
   const handleChange = (name) => (e) => {
-    const value = name === "image" ? e.target.files[0] : e.target.value;
+    /* const value = name === "image" ? e.target.files[0] : e.target.value;
     const imageValue =
       name === "image" ? e.target.files[0].name : "Upload image";
-    formData.set(name, value);
+    formData.set(name, value); */
+
     setState({
       ...state,
-      [name]: value,
+      [name]: e.target.value,
       error: "",
       success: "",
-      imageUploadText: imageValue,
     });
+  };
+
+  const handleImage = (event) => {
+    let fileInput = false;
+    if (event.target.files[0]) {
+      fileInput = true;
+    }
+    if (fileInput) {
+      Resizer.imageFileResizer(
+        event.target.files[0],
+        300,
+        300,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          //   console.log("uri",uri);
+          setState({
+            ...state,
+            image: uri,
+            imageUploadText: event.target.files[0].name.split(".")[0],
+          });
+        },
+        "base64"
+      );
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setState({ ...state, buttonText: "Creating" });
-    console.log(...formData);
+    console.table({name, content, image})
     try {
-        const response = await axios.post(`${API}/category`, formData, {
-            headers : {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        console.log('CATEGORY CREATE RESPONSE',response)
-        setState({...state, name: '',content:'',success: `${response.data.name} is created`, formData: '', buttonText:'Created',imageUploadText:'Upload image' })
+      const response = await axios.post(
+        `${API}/category`,
+        { name, content, image },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("CATEGORY CREATE RESPONSE", response);
+      setState({
+        ...state,
+        name: "",
+        content: "",
+        success: `${response.data.name} is created`,
+        buttonText: "Created",
+        imageUploadText: "Upload image",
+      });
     } catch (error) {
-        console.log('CATEGORY CREATE ERROR',error)
-        setState({...state, buttonText:'Create', error: error.response.data.error })
+      console.log("CATEGORY CREATE ERROR", error);
+      setState({
+        ...state,
+        buttonText: "Create",
+        error: error.response.data.error,
+      });
     }
   };
 
@@ -81,18 +125,18 @@ const Create = ({user, token}) => {
       </div>
       <div className="form-group">
         <label className="btn btn-outline-secondary mt-2">
-            {imageUploadText}
-            <input
-            onChange={handleChange("image")}
+          {imageUploadText}
+          <input
+            onChange={handleImage}
             type="file"
             accept="image/*"
             className="form-control"
             hidden
-            />
+          />
         </label>
       </div>
       <div>
-          <button className="btn btn-outline-warning mt-2">{buttonText}</button>
+        <button className="btn btn-outline-warning mt-2">{buttonText}</button>
       </div>
     </form>
   );
