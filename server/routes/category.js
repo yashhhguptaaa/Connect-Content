@@ -23,7 +23,7 @@ const {
 // routes
 router.post(
   '/category',
-  categoryCreateValidator,
+  // categoryCreateValidator,
   runValidation,
   expressJwt({ secret: process.env.JWT_SECRET ,algorithms: ['HS256']}),
 // requireSignIn,
