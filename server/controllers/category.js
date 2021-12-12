@@ -12,7 +12,7 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-exports.create = (req, res) => {
+ /* exports.create = (req, res) => {
   let form = new formidable.IncomingForm();
   form.parse(req, (err, fields, files) => {
     if (err) {
@@ -62,6 +62,51 @@ exports.create = (req, res) => {
       });
     });
   });
+}; */
+
+
+exports.create = (req, res) => {
+  const {name, image, content} = req.body
+
+  //image data
+  const base64Data = new Buffer.from(image.replace(/^data:image\/\w+;base64,/,''),'base64')
+  /* "^data:image" replaces with '' + ";base64," replaces with '' and  the type is 'base64' */
+
+  const type = image.split(';')[0].split('/')[1];
+
+  const slug = slugify(name);
+  let category = new Category({ name, content, slug });
+
+  // upload image to s3
+  const params = {
+    Bucket: "connect-content1",
+    Key: `category/${uuidv4()}.${type}`,
+    Body: base64Data,
+    ACL: "public-read",
+    contentEncoding: 'base64',
+    ContentType: `image/${type}`,
+  };
+
+  s3.upload(params, function (err, data) {
+    if (err) {
+      console.log("err :", err); 
+      res.status(400).json({ error: "Upload to s3 failed" });
+    }
+
+    console.log("AWS UPLOAD RES DATA", data);
+    category.image.url = data.Location;
+    category.image.key = data.key;
+
+    // save to db
+    category.save((err, success) => {
+      if (err) {
+          console.log("Error while post category: ",err)
+        res.status(400).json({ error: "Duplicate Category" });
+      }
+      return res.json(success);
+    });
+  });
+
 };
 
 exports.list = (req, res) => {
