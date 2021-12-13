@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
-const categorySchema = new mongoose.Schema(
+const linkSchema = new mongoose.Schema(
   {
     title: {
       type: String,
