@@ -4,8 +4,9 @@ import { showSuccessMessage, showErrorMessage } from "../../../helpers/alerts";
 
 import axios from "axios";
 import { API } from "../../../config";
+import { getCookie, isAuth } from "../../../helpers/auth";
 
-const Create = () => {
+const Create = ({ token }) => {
   const [state, setState] = useState({
     title: "",
     url: "",
@@ -39,15 +40,43 @@ const Create = () => {
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault()
-      console.table({title, url, categories, type, medium})
+    e.preventDefault();
+    //   console.table({title, url, categories, type, medium})
+    try {
+      const response = await axios.post(
+        `${API}/link`,
+        { title, url, categories, type, medium },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setState({
+        ...state,
+        title: "",
+        url: "",
+        categories: [],
+        loadedCategories: [],
+        success: "Link is created",
+        error: "",
+        type: "",
+        medium: "",
+      });
+    } catch (error) {
+      console.log("Link Submit Error", error);
+      setState({ ...state, title: "", error: error.response.data.error });
+    }
   };
+
   const handleTitleChange = async (e) => {
     setState({ ...state, title: e.target.value, error: "", success: "" });
   };
+
   const handleURLChange = async (e) => {
     setState({ ...state, url: e.target.value, error: "", success: "" });
   };
+
   const handleToogle = (c) => () => {
     // return the first index or -1
     const clickedCategory = categories.indexOf(c);
@@ -60,9 +89,11 @@ const Create = () => {
     }
     setState({ ...state, categories: all, success: "", error: "" });
   };
+
   const handleTypeClick = (e) => {
     setState({ ...state, type: e.target.value, success: "", error: "" });
   };
+
   const handleMediumClick = (e) => {
     setState({ ...state, medium: e.target.value, success: "", error: "" });
   };
@@ -166,8 +197,14 @@ const Create = () => {
         />
       </div>
       <div>
-        <button className="btn btn-outline-warning mt-2" type="submit">
-          Post
+        <button
+          disabled={!token}
+          className={
+            token ? "btn btn-outline-warning mt-2" : "btn btn-danger mt-2"
+          }
+          type="submit"
+        >
+          {isAuth() || token ? "Post" : "First Login, Then Post"}
         </button>
       </div>
     </form>
@@ -198,10 +235,19 @@ const Create = () => {
             {showMedium()}
           </div>
         </div>
-        <div className="col-md-7">{submitLinkForm()}</div>
+        <div className="col-md-7">
+          {success && showSuccessMessage(success)}
+          {error && showErrorMessage(error)}
+          {submitLinkForm()}
+        </div>
       </div>
     </Layout>
   );
+};
+
+Create.getInitialProps = ({ req }) => {
+  const token = getCookie("token", req);
+  return { token };
 };
 
 export default Create;
