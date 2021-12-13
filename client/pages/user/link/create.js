@@ -44,7 +44,30 @@ const Create = () => {
   };
   const handleURLChange = async (e) => {
     setState({ ...state, url: e.target.url, error: "", success: "" });
+  }; 
+  const handleToogle = c => () => {
+      // return the first index or -1
+      const clickedCategory = categories.indexOf(c)
+      const all = [...categories]
+
+      if(clickedCategory === -1){
+          all.push(c)
+      } else {
+          all.splice(clickedCategory,1)
+      }
+      setState({...state, categories : all, success: '',error: ''})
+
   };
+
+  //show categories > checkbox
+  const showCategories = () => {
+      return loadedCategories && loadedCategories.map((c, i) => (
+        <li className="list-unstyled" key={c._id}> 
+            <input type = "checkbox" onChange={handleToogle(c._id)} className="mr-2"/>
+            <label className="form-check-label">{c.name}</label>
+        </li>
+      ))
+  }  
 
   //link create form
   const submitLinkForm = () => (
@@ -86,9 +109,13 @@ const Create = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-4">xxxxxxx</div>
-        <div className="col-md-8">{submitLinkForm()}</div>
+        <div className="col-md-5">
+            <label className="text-muted ml-4">Category</label>
+            <ul style={{maxHeight: '100px', overflowY: 'scroll'}}>{showCategories()}</ul>
+        </div>
+        <div className="col-md-7">{submitLinkForm()}</div>
       </div>
+      {JSON.stringify(categories)}
     </Layout>
   );
 };
