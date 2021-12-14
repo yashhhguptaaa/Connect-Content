@@ -39,3 +39,21 @@ exports.read = (req, res) => {};
 exports.update = (req, res) => {};
 
 exports.remove = (req, res) => {};
+
+exports.clickCount = (req,res) => {
+    const {linkId} = req.body;
+
+    /* $inc means increment , "{clicks: 1}" means clicks by 1 i.e, increment clicks by one */
+    /*  "{new: true}" means return the updated one */
+    /* The upsert = true option creates the object if it doesn't exist. */
+    Link.findByIdAndUpdate(linkId, {$inc: {clicks: 1}}, {upsert:true ,new: true}).exec((err, result) => {
+        if(err) {
+            return res.status(400).json({
+                error : 'Could not update view count'
+            });
+        }
+        res.json(result)
+    })
+
+    
+};
