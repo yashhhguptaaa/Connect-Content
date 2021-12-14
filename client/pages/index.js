@@ -6,7 +6,7 @@ import Link from "next/link";
 const Home = ({ categories }) => {
   const listCategories = () =>
     categories.map((c, i) => (
-      <Link href="/">
+      <Link href={`/links/${c.slug}`}>
         <a
           style={{ border: "1px solid red" }}
           className="bg-light p-3 col-md-4 text-decoration-none"
