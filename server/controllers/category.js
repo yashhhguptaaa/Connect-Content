@@ -4,7 +4,7 @@ const slugify = require("slugify");
 const formidable = require("formidable");
 const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
-const fs = require("fs");
+// const fs = require("fs");
 
 //s3
 const s3 = new AWS.S3({
