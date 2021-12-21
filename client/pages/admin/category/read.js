@@ -29,6 +29,10 @@ const Read = ({user, token}) => {
         setState({...state, categories: response.data})
     }
 
+    const confirmDelete = (slug) => {
+        console.log('delete > ',slug);
+    }
+
     const listCategories = () =>(
         categories.map((c, i) => (
             <Link href={`/links/${c.slug}`} key={c._id}>
@@ -38,17 +42,29 @@ const Read = ({user, token}) => {
                 >
                 <div>
                     <div className="d-flex row">
-                    <div className="col-md-6">
-                        <img
-                        src={c.image && c.image.url}
-                        alt={c.name}
-                        style={{ width: "100px", height: "auto" }}
-                        className="px-3"
-                        />
-                    </div>
-                    <div className="col-md-12 ">
-                        <h3>{c.name}</h3>
-                    </div>
+                        <div className="col-md-3">
+                            <img
+                            src={c.image && c.image.url}
+                            alt={c.name}
+                            style={{ width: "100px", height: "auto" }}
+                            className="px-3"
+                            />
+                        </div>
+                        
+                        <div className="col-md-6">
+                            <h3>{c.name}</h3>
+                        </div>
+
+                        <div className="col-md-3 pull-right">
+                            <Link href={`/admin/category/${c.slug}`}>
+                               <button className="btn btn-sm btn-outline-success btn-block mb-1">Update</button>
+                            </Link>
+                            <br />
+                            <button onClick={() => confirmDelete(c.slug)} className="btn btn-sm btn-outline-danger btn-block">
+                                Delete
+                            </button>
+                        </div>
+                        
                     </div>
                 </div>
                 </a>

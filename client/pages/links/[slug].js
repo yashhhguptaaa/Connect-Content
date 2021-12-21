@@ -34,7 +34,7 @@ const Links = ({
 
   const listOfLinks = () =>
     allLinks.map((l, i) => (
-      <div className="row alert alert-primary p-2">
+      <div key={i} className="row alert alert-primary p-2">
         <div className="col-md-8" onClick={() => handleClick(l._id)}>
           <a href={l.url} target="_blank">
             <h5 className="pt-2">{l.title}</h5>
@@ -56,6 +56,7 @@ const Links = ({
             {l.type} / {l.medium}
             {l.categories.map((c, i) => (
               <span
+                key={i}
                 className="badge btn btn-success ms-3"
                 style={{ fontSize: "12px", borderRadius: "12px" }}
               >
@@ -109,28 +110,25 @@ const Links = ({
         </div>
       </div>
       <br />
-      <div className="row">
-        <div className="col-md-8">{listOfLinks()}</div>
-        <div className="col-md-4">
-          <h2 className="lead">Most popular in {category.name}</h2>
-        </div>
-      </div>
+
 
       {/* <div className="text-center pt-4 pb-5">{loadMoreButton()}</div> */}
 
-      <div className="row">
-        <div className="col-md-12 text-center">
           <InfiniteScroll
             pageStart={0}
             loadMore={loadMore}
             hasMore= {size>0 && size>= limit} 
             loader={
-              <img style={{height:"80px"}} src="/static/images/loading.gif" alt="loading" />
+              <img key={0} style={{height:"80px"}} src="/static/images/loading.gif" alt="loading" />
             }
           >
+            <div className="row">
+              <div className="col-md-8">{listOfLinks()}</div>
+              <div className="col-md-4">
+                <h2 className="lead">Most popular in {category.name}</h2>
+              </div>
+            </div>
           </InfiniteScroll>
-        </div>
-      </div>
     </Layout>
   );
 };
