@@ -170,7 +170,7 @@ exports.update = (req, res) => {
       // remove the existing image from s3 before uploading new/updated one
       const deleteParams = {
         Bucket: "connect-content1",
-        Key: `category/${updated.image.key}`
+        Key: `${updated.image.key}`
       };
 
       s3.deleteObject(deleteParams, function(err, data){
@@ -179,6 +179,15 @@ exports.update = (req, res) => {
         }
         else console.log('S3 DELETED DURING UPDATE',data)
       })
+
+      const base64Data = new Buffer.from(
+        image.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      );
+      /* "^data:image" replaces with '' + ";base64," replaces with '' and  the type is 'base64' */
+    
+      const type = image.split(";")[0].split("/")[1];
+    
 
       // upload image to s3
       const params = {
@@ -206,13 +215,15 @@ exports.update = (req, res) => {
             console.log("Error while post category: ", err);
             res.status(400).json({ error: "Duplicate Category" });
           }
-          res.json(success);
+          res.json(success);  
         });
       });
 
 
     }
+    else{   
       res.json(updated)
+    }
     
   })
 
@@ -230,7 +241,7 @@ exports.remove = (req, res) => {
     // remove the existing image from s3 before uploading new/updated one
     const deleteParams = {
       Bucket: "connect-content1",
-      Key: `category/${data.image.key}`
+      Key: `${data.image.key}`
     };
 
     s3.deleteObject(deleteParams, function(err, data){
