@@ -43,7 +43,7 @@ router.put(
   update
 );
 router.delete(
-  "/link/:slug",
+  "/link/:ids",
   // requireSignIn,
   expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
   authMiddleware,

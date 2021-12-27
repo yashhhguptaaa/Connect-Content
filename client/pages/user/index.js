@@ -2,11 +2,37 @@ import Layout from "../../components/Layout";
 import axios from "axios";
 import { API } from "../../config";
 import { getCookie } from "../../helpers/auth";
+import Router from 'next/router';
 import withUser from "../withUser";
 import Link from "next/link";
 import moment from "moment";
 
 const User = ({ user, userLinks, token }) => {
+
+  const confirmDelete = (e, id) => {
+    e.preventDefault();
+    // console.log('delete > ',slug);
+    let answer = window.confirm('Are you sure you want to delete?');
+    if(answer) {
+        handleDelete(id);
+    }
+  }
+
+  const handleDelete = async(id) => {
+    console.log("Delete: ",id)
+      try {
+          const response = await axios.delete(`${API}/link/${id}`,{
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          })
+          console.log('LINK DELETE SUCCESS',response)
+          // Router.push('/user/index')
+      } catch (error) {
+          console.log('Link delete error: ',error)
+      }
+  }
+
   const listOfLinks = () =>
     userLinks.map((l, i) => (
       <div key={i} className="row alert alert-primary p-2">
@@ -22,9 +48,18 @@ const User = ({ user, userLinks, token }) => {
           <span className="pull-right">
             {moment(l.createdAt).fromNow()} by {l.postedBy.name}
           </span>
+          <br />
           <span className="badge text-secondary pull-right">
             {l.clicks} clicks
           </span>
+          <br />
+          <div className="ms-5">
+            <span onClick={(e) => confirmDelete(e,l._id)} className="badge btn-danger text-dark pull-right"> Delete</span>
+            <br />
+            <Link href={`/user`}>
+              <span className="badge btn-warning text-dark pull-right">Edit</span>
+            </Link>
+          </div>
         </div>
         <div className="col-md-12">
           <div className="badge text-dark">
