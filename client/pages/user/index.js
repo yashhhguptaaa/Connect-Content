@@ -4,9 +4,9 @@ import { API } from "../../config";
 import { getCookie } from "../../helpers/auth";
 import withUser from "../withUser";
 
-const User = ({ user, token }) => (
+const User = ({ user,userLinks, token }) => (
   <Layout>
-    <p>{JSON.stringify(user)}</p>
+    <p>{JSON.stringify(userLinks)}</p>
   </Layout>
 );
 
