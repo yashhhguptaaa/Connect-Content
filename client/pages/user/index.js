@@ -27,7 +27,7 @@ const User = ({ user, userLinks, token }) => {
               }
           })
           console.log('LINK DELETE SUCCESS',response)
-          // Router.push('/user/index')
+          Router.push('/user')
       } catch (error) {
           console.log('Link delete error: ',error)
       }

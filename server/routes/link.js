@@ -34,7 +34,7 @@ router.get("/links", list);
 router.put("/click-count", clickCount);
 router.get("/link/:slug", read);
 router.put(
-  "/link/:slug",
+  "/link/:id",
   linkUpdateValidator,
   runValidation,
   //   requireSignIn,
@@ -43,7 +43,7 @@ router.put(
   update
 );
 router.delete(
-  "/link/:ids",
+  "/link/:id",
   // requireSignIn,
   expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
   authMiddleware,
