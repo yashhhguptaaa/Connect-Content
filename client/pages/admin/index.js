@@ -19,6 +19,11 @@ const Admin = ({ user }) => (
               <a>All Categories</a>
             </Link>
           </li>
+          <li className="nav-item">
+            <Link href="/admin/link/read">
+              <a>All Links</a>
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="col-md-8"></div>
