@@ -10,7 +10,12 @@ const {
 const { runValidation } = require("../validators/index");
 
 // controllers
-const { requireSignIn, authMiddleware } = require("../controllers/auth");
+const {
+  requireSignIn,
+  authMiddleware,
+  adminMiddleware,
+} = require("../controllers/auth");
+
 const {
   create,
   list,
@@ -30,9 +35,18 @@ router.post(
   authMiddleware,
   create
 );
-router.get("/links", list);
+
+router.post(
+  "/links", 
+  expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }), 
+  adminMiddleware, 
+  list
+);
+
 router.put("/click-count", clickCount);
+
 router.get("/link/:id", read);
+
 router.put(
   "/link/:id",
   linkUpdateValidator,
@@ -42,6 +56,7 @@ router.put(
   authMiddleware,
   update
 );
+
 router.delete(
   "/link/:id",
   // requireSignIn,

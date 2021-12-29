@@ -21,47 +21,58 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  Link.find({}).exec((err, data) => {
-    if (err) {
-      console.log("Error while getting links from db:", err);
-      return res.status(400).json({
-        error: "Could not list links",
-      });
-    }
-    res.json(data);
-  });
+  let limit = req.body.limit ? parseInt(req.body.limit) : 5;
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+
+  Link.find({})
+    .populate('postedBy','name')
+    .populate('categories','name,slug')
+    .sort({createdAt: -1})
+    .limit(limit)
+    .skip(skip)
+    .exec((err, data) => {
+      if (err) {
+        console.log("Error while getting links from db:", err);
+        return res.status(400).json({
+          error: "Could not list links",
+        });
+      }
+      res.json(data);
+    });
 };
 
 exports.read = (req, res) => {
-  const {id} = req.params;
-  Link.findOne({_id: id}).exec((err, data) => {
+  const { id } = req.params;
+  Link.findOne({ _id: id }).exec((err, data) => {
     if (err) {
       return res.status(400).json({
         error: "Error finding the link",
       });
     }
     res.json(data);
-  })
+  });
 };
 
 exports.update = (req, res) => {
   const { id } = req.params;
-  const {title, url, categories, type, medium} = req.body 
-  const updatedLink = {title, url, categories, type, medium}
-  Link.findOneAndUpdate({_id: id},updatedLink, {new:true} ).exec((err, updated) =>{
-    if (err) {
-      return res.status(400).json({
-        error: "Error updating the link",
-      });
+  const { title, url, categories, type, medium } = req.body;
+  const updatedLink = { title, url, categories, type, medium };
+  Link.findOneAndUpdate({ _id: id }, updatedLink, { new: true }).exec(
+    (err, updated) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Error updating the link",
+        });
+      }
+      res.json(updated);
     }
-    res.json(updated);
-  })
+  );
 };
 
 exports.remove = (req, res) => {
   const { id } = req.params;
 
-  Link.findOneAndRemove({_id : id }).exec((err, data) => {
+  Link.findOneAndRemove({ _id: id }).exec((err, data) => {
     if (err) {
       return res.status(400).json({
         error: "Could not delete link",
