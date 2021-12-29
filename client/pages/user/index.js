@@ -56,7 +56,7 @@ const User = ({ user, userLinks, token }) => {
           <div className="ms-5">
             <span onClick={(e) => confirmDelete(e,l._id)} className="badge btn-danger text-dark pull-right"> Delete</span>
             <br />
-            <Link href={`/user`}>
+            <Link href={`/user/link/${l._id}`}>
               <span className="badge btn-warning text-dark pull-right">Edit</span>
             </Link>
           </div>
