@@ -26,6 +26,7 @@ const Register = () => {
     success,
     buttonText,
     loadedCategories,
+    categories
   } = state;
 
   useEffect(() => {
