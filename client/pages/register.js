@@ -1,6 +1,6 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import Router from 'next/router'
+import Router from "next/router";
 import { showSuccessMessage, showErrorMessage } from "../helpers/alerts";
 import axios from "axios";
 import { API } from "../config";
@@ -14,13 +14,58 @@ const Register = () => {
     error: "",
     success: "",
     buttonText: "Register",
+    loadedCategories: [],
+    categories: [],
   });
 
-  useEffect(() => {
-    isAuth() && Router.push('/');
-}, [])
+  const {
+    name,
+    email,
+    password,
+    error,
+    success,
+    buttonText,
+    loadedCategories,
+  } = state;
 
-  const { name, email, password, error, success, buttonText } = state;
+  useEffect(() => {
+    isAuth() && Router.push("/");
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    const response = await axios.get(`${API}/categories`);
+    setState({ ...state, loadedCategories: response.data });
+  };
+
+  const handleToogle = (c) => () => {
+    // return the first index or -1
+    const clickedCategory = categories.indexOf(c);
+    const all = [...categories];
+
+    if (clickedCategory === -1) {
+      all.push(c);
+    } else {
+      all.splice(clickedCategory, 1);
+    }
+    setState({ ...state, categories: all, success: "", error: "" });
+  };
+
+  const showCategories = () => {
+    return (
+      loadedCategories &&
+      loadedCategories.map((c, i) => (
+        <li className="list-unstyled" key={c._id}>
+          <input
+            type="checkbox"
+            onChange={handleToogle(c._id)}
+            className="me-2"
+          />
+          <label className="form-check-label">{c.name}</label>
+        </li>
+      ))
+    );
+  };
 
   const handleChange = (name) => (e) => {
     setState({
@@ -34,33 +79,33 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setState({...state,buttonText:'Registering'})
+    setState({ ...state, buttonText: "Registering" });
 
     try {
       const response = await axios.post(`${API}/register`, {
         name,
         email,
         password,
-      })
+        categories
+      });
 
       setState({
         ...state,
-        name:'',
-        email:'',
-        password:'',
-        buttonText:'Submitted',
-        success: response.data.message
-      })
-
+        name: "",
+        email: "",
+        password: "",
+        categories: [],
+        buttonText: "Submitted",
+        success: response.data.message,
+      });
     } catch (error) {
       setState({
         ...state,
-        buttonText:'Register',
-        error: error.response.data.error
-      })
+        buttonText: "Register",
+        error: error.response.data.error,
+      });
     }
-  }
-
+  };
 
   const registerForm = () => (
     <form onSubmit={handleSubmit}>
@@ -95,6 +140,12 @@ const Register = () => {
         />
       </div>
       <div className="form-group">
+        <label className="text-muted ms-4">Select Categories , you are interested in</label>
+        <ul style={{ maxHeight: "100px", overflowY: "scroll" }}>
+          {showCategories()}
+        </ul>
+      </div>
+      <div className="form-group">
         <button className="btn btn-outline-danger">{buttonText}</button>
       </div>
     </form>
@@ -102,11 +153,10 @@ const Register = () => {
 
   return (
     <Layout>
-      
       <div className="col-md-6 offset-md-3">
         <h1>Register</h1>
         {success && showSuccessMessage(success)}
-        {error && showErrorMessage(error) }
+        {error && showErrorMessage(error)}
         <br />
         {registerForm()}
       </div>
