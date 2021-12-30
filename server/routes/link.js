@@ -14,6 +14,7 @@ const {
   requireSignIn,
   authMiddleware,
   adminMiddleware,
+  canUpdateDeleteLink
 } = require("../controllers/auth");
 
 const {
@@ -54,6 +55,17 @@ router.put(
   //   requireSignIn,
   expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
   authMiddleware,
+  canUpdateDeleteLink,
+  update
+);
+
+router.put(
+  "/link/admin/:id",
+  linkUpdateValidator,
+  runValidation,
+  //   requireSignIn,
+  expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
+  adminMiddleware,
   update
 );
 
@@ -62,6 +74,15 @@ router.delete(
   // requireSignIn,
   expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
   authMiddleware,
+  canUpdateDeleteLink,
+  remove
+);
+
+router.delete(
+  "/link/admin/:id",
+  // requireSignIn,
+  expressJwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
+  adminMiddleware,
   remove
 );
 
