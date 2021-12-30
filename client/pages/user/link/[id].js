@@ -44,9 +44,18 @@ const Update = ({ oldLink, token }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //   console.table({title, url, categories, type, medium})
+    // Link based on, logged in user role
+
+    let dynamicUpdateUrl
+    if(isAuth() && isAuth().role == 'admin' ) {
+      dynamicUpdateUrl = `${API}/link/admin/${oldLink._id}`
+    }
+    else {
+      dynamicUpdateUrl = `${API}/link/${oldLink._id}`
+    }
     try {
       const response = await axios.put(
-        `${API}/link/${oldLink._id}`,
+        dynamicUpdateUrl,
         { title, url, categories, type, medium },
         {
           headers: {
@@ -119,7 +128,7 @@ const Update = ({ oldLink, token }) => {
             type="radio"
             onChange={handleTypeClick}
             checked={type == "Free"}
-            value="free"
+            value="Free"
             className="form-check-input"
             name="type"
           />
@@ -130,7 +139,7 @@ const Update = ({ oldLink, token }) => {
             type="radio"
             onChange={handleTypeClick}
             checked={type == "Paid"}
-            value="paid"
+            value="Paid"
             className="form-check-input"
             name="type"
           />
@@ -148,7 +157,7 @@ const Update = ({ oldLink, token }) => {
             type="radio"
             checked={medium == "Video"}
             onChange={handleMediumClick}    
-            value="video"
+            value="Video"
             className="form-check-input"
             name="medium"
           />
@@ -159,7 +168,7 @@ const Update = ({ oldLink, token }) => {
             type="radio"
             checked={medium == "Book"}
             onChange={handleMediumClick}
-            value="book"
+            value="Book"
             className="form-check-input"
             name="medium"
           />

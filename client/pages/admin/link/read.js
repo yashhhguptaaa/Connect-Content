@@ -68,7 +68,7 @@ const Links = ({ links, totalLinks, linksLimit, linkSkip, token }) => {
               Delete
             </span>
             <br />
-            <Link href={`/admin/user/link/${l._id}`}>
+            <Link href={`/user/link/${l._id}`}>
               <span className="badge btn-warning text-dark pull-right">
                 Edit
               </span>
