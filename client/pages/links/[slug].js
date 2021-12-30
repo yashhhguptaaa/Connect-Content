@@ -119,7 +119,7 @@ const Links = ({
             loadMore={loadMore}
             hasMore= {size>0 && size>= limit} 
             loader={
-              <img key={0} style={{height:"80px"}} src="/static/images/loading.gif" alt="loading" />
+              <img key={0} style={{height:"40px"}} src="/static/images/loading.gif" alt="loading" />
             }
           >
             <div className="row">
@@ -135,11 +135,12 @@ const Links = ({
 
 Links.getInitialProps = async ({ query, req }) => {
   let skip = 0;
-  let limit = 2;
+  let limit = 1;
   const response = await axios.post(`${API}/category/${query.slug}`, {
     skip,
     limit,
   });
+  console.log("response: ",response)
   return {
     query,
     category: response.data.category,
