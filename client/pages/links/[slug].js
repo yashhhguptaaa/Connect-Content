@@ -21,10 +21,21 @@ const Links = ({
   const [limit, setLimit] = useState(linksLimit);
   const [skip, setSkip] = useState(linkSkip);
   const [size, setSize] = useState(totalLinks);
+  const [popular, setPopular] = useState([])
+
+  useEffect(() => {
+      loadPopular()
+  },[])
+
+  const loadPopular = async() => {
+    const response = await axios.get(`${API}/link/popular/${category.slug}`);
+    setPopular(response.data)
+  }
 
   const handleClick = async (linkId) => {
     const response = await axios.put(`${API}/click-count`, { linkId });
     loadUpdatedLinks();
+    loadPopular()
   };
 
   const loadUpdatedLinks = async () => {
@@ -32,11 +43,11 @@ const Links = ({
     setAllLinks(response.data.links);
   };
 
-  const listOfLinks = () =>
-    allLinks.map((l, i) => (
-      <div key={i} className="row alert alert-primary p-2">
+  const listOfLinks = (mapLinks) =>
+    mapLinks.map((l, i) => (
+      <div key={i} className={mapLinks ==allLinks ? "row alert alert-primary p-2" : "row alert alert-success p-2"}>
         <div className="col-md-8" onClick={() => handleClick(l._id)}>
-          <a href={l.url} target="_blank">
+          <a className ="nav-link" href={l.url} target="_blank">
             <h5 className="pt-2">{l.title}</h5>
             <h6 className="pt-2 text-danger" style={{ fontSize: "12px" }}>
               {l.url}
@@ -97,7 +108,7 @@ const Links = ({
       <div className="row">
         <div className="col-md-8">
           <h1 className="display-4 font-weight-bold">{category.name}</h1>
-          <div className="lead alert alert-secondary pt-4">
+          <div className="lead alert alert-danger pt-4">
             {renderHTML(category.content)}
           </div>
         </div>
@@ -123,9 +134,10 @@ const Links = ({
             }
           >
             <div className="row">
-              <div className="col-md-8">{listOfLinks()}</div>
-              <div className="col-md-4">
-                <h2 className="lead">Most popular in {category.name}</h2>
+              <div className="col-md-8">{listOfLinks(allLinks)}</div>
+              <div className="col-md-4 text-center">
+                <h2 className="lead font-weight-bold"><b>Most popular in {category.name}</b></h2>
+                <div className="col-md-12 ms-4">{listOfLinks(popular)}</div>
               </div>
             </div>
           </InfiniteScroll>
