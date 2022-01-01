@@ -11,17 +11,22 @@ const Admin = ({ user }) => (
         <ul className="nav flex-column">
           <li className="nav-item">
             <Link href="/admin/category/create">
-              <a>Create Category</a>
+              <a className="nav-link">Create Category</a>
             </Link>
           </li>
           <li className="nav-item">
             <Link href="/admin/category/read">
-              <a>All Categories</a>
+              <a className="nav-link">All Categories</a>
             </Link>
           </li>
           <li className="nav-item">
             <Link href="/admin/link/read">
-              <a>All Links</a>
+              <a className="nav-link">All Links</a>
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link href="/user/profile/update">
+              <a className="nav-link">Profile Update</a>
             </Link>
           </li>
         </ul>

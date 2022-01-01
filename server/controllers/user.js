@@ -27,7 +27,7 @@ exports.read = (req, res) => {
   });
 };
 
-exports.update = (res, req) => {
+exports.update = (req, res) => {
   const { name, password, categories } = req.body;
   switch (true) {
     case password && password.length < 6:
