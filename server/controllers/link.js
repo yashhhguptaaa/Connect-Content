@@ -147,6 +147,7 @@ exports.clickCount = (req, res) => {
 exports.popular = (req, res) => {
   Link.find()
   .populate('postedBy','name')
+  .populate("categories", "name slug")
   .sort({clicks: -1})
   .limit(3)
   .exec((err, links) => {
@@ -170,6 +171,8 @@ exports.popularInCategory = (req, res) => {
     }
 
     Link.find({categories: category})
+    .populate('postedBy','name')
+    .populate("categories", "name slug")
     .sort({clicks : -1})
     .limit(3)
     .exec((err, links) => {
