@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../../components/Layout";
 import { showSuccessMessage, showErrorMessage } from "../../helpers/alerts";
-
+import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import { API } from "../../config";
+import { API, APP_NAME } from "../../config";
 import renderHTML from "react-render-html";
 import moment from "moment";
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from "react-infinite-scroller";
 
 const Links = ({
   query,
@@ -21,21 +21,37 @@ const Links = ({
   const [limit, setLimit] = useState(linksLimit);
   const [skip, setSkip] = useState(linkSkip);
   const [size, setSize] = useState(totalLinks);
-  const [popular, setPopular] = useState([])
+  const [popular, setPopular] = useState([]);
+
+  // function to remove all HTML
+  const stripHTML = data => data.replace( /<\/?[^>]+(>|$)/g, '')
+
+  const head = () => (
+    <Head>
+      <title>
+        {category.name} | {APP_NAME}
+      </title>
+      <meta name="description" content={stripHTML(category.content.substring(0,160))} />
+      <meta property="og:title" content={category.name} />
+      <meta property="og:description" content={stripHTML(category.content.substring(0,160))} />
+      <meta property="og:image" content={category.image.url} />
+      <meta property="og:image:secure_url" content={category.image.url} />
+    </Head>
+  );
 
   useEffect(() => {
-      loadPopular()
-  },[])
+    loadPopular();
+  }, []);
 
-  const loadPopular = async() => {
+  const loadPopular = async () => {
     const response = await axios.get(`${API}/link/popular/${category.slug}`);
-    setPopular(response.data)
-  }
+    setPopular(response.data);
+  };
 
   const handleClick = async (linkId) => {
     const response = await axios.put(`${API}/click-count`, { linkId });
     loadUpdatedLinks();
-    loadPopular()
+    loadPopular();
   };
 
   const loadUpdatedLinks = async () => {
@@ -45,9 +61,16 @@ const Links = ({
 
   const listOfLinks = (mapLinks) =>
     mapLinks.map((l, i) => (
-      <div key={i} className={mapLinks ==allLinks ? "row alert alert-primary p-2" : "row alert alert-success p-2"}>
+      <div
+        key={i}
+        className={
+          mapLinks == allLinks
+            ? "row alert alert-primary p-2"
+            : "row alert alert-success p-2"
+        }
+      >
         <div className="col-md-8" onClick={() => handleClick(l._id)}>
-          <a className ="nav-link" href={l.url} target="_blank">
+          <a className="nav-link" href={l.url} target="_blank">
             <h5 className="pt-2">{l.title}</h5>
             <h6 className="pt-2 text-danger" style={{ fontSize: "12px" }}>
               {l.url}
@@ -104,44 +127,53 @@ const Links = ({
   // };
 
   return (
-    <Layout>
-      <div className="row">
-        <div className="col-md-8">
-          <h1 className="display-4 font-weight-bold">{category.name}</h1>
-          <div className="lead alert alert-danger pt-4">
-            {renderHTML(category.content)}
+    <Fragment>
+      {head()}
+      <Layout>
+        <div className="row">
+          <div className="col-md-8">
+            <h1 className="display-4 font-weight-bold">{category.name}</h1>
+            <div className="lead alert alert-danger pt-4">
+              {renderHTML(category.content)}
+            </div>
+          </div>
+          <div className="col-md-4">
+            <img
+              src={category.image.url}
+              alt={category.name}
+              style={{ width: "auto", maxHeight: "200px", marginTop: "10vh" }}
+            />
           </div>
         </div>
-        <div className="col-md-4">
-          <img
-            src={category.image.url}
-            alt={category.name}
-            style={{ width: "auto", maxHeight: "200px", marginTop: "10vh" }}
-          />
-        </div>
-      </div>
-      <br />
+        <br />
 
+        {/* <div className="text-center pt-4 pb-5">{loadMoreButton()}</div> */}
 
-      {/* <div className="text-center pt-4 pb-5">{loadMoreButton()}</div> */}
-
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={loadMore}
-            hasMore= {size>0 && size>= limit} 
-            loader={
-              <img key={0} style={{height:"40px"}} src="/static/images/loading.gif" alt="loading" />
-            }
-          >
-            <div className="row">
-              <div className="col-md-8">{listOfLinks(allLinks)}</div>
-              <div className="col-md-4 text-center">
-                <h2 className="lead font-weight-bold"><b>Most popular in {category.name}</b></h2>
-                <div className="col-md-12 ms-4">{listOfLinks(popular)}</div>
-              </div>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadMore}
+          hasMore={size > 0 && size >= limit}
+          loader={
+            <img
+              key={0}
+              style={{ height: "40px" }}
+              src="/static/images/loading.gif"
+              alt="loading"
+            />
+          }
+        >
+          <div className="row">
+            <div className="col-md-8">{listOfLinks(allLinks)}</div>
+            <div className="col-md-4 text-center">
+              <h2 className="lead font-weight-bold">
+                <b>Most popular in {category.name}</b>
+              </h2>
+              <div className="col-md-12 ms-4">{listOfLinks(popular)}</div>
             </div>
-          </InfiniteScroll>
-    </Layout>
+          </div>
+        </InfiniteScroll>
+      </Layout>
+    </Fragment>
   );
 };
 
@@ -152,7 +184,7 @@ Links.getInitialProps = async ({ query, req }) => {
     skip,
     limit,
   });
-  console.log("response: ",response)
+  console.log("response: ", response);
   return {
     query,
     category: response.data.category,

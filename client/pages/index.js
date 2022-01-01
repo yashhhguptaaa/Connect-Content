@@ -1,23 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
-import { API } from "../config";
+import { API, APP_NAME } from "../config";
 import Link from "next/link";
 import moment from "moment";
-
+import Head from "next/head";
 
 const Home = ({ categories }) => {
+  const [popular, setPopular] = useState([]);
 
-  const [popular, setPopular] = useState([])
+  const head = () => (
+    <Head>
+      <title>
+        {APP_NAME}
+      </title>
+      <meta
+        name="description"
+        content= "all categories and popular links"
+      />
+    </Head>
+  );
 
   useEffect(() => {
-      loadPopular()
-  },[])
+    loadPopular();
+  }, []);
 
-  const loadPopular = async() => {
+  const loadPopular = async () => {
     const response = await axios.get(`${API}/link/popular`);
-    setPopular(response.data)
-  }
+    setPopular(response.data);
+  };
 
   const handleClick = async (linkId) => {
     const response = await axios.put(`${API}/click-count`, { linkId });
@@ -25,7 +36,8 @@ const Home = ({ categories }) => {
   };
 
   const listOfLinks = () =>
-    popular && popular.map((l, i) => (
+    popular &&
+    popular.map((l, i) => (
       <div key={i} className="row alert alert-secondary p-2">
         <div className="col-md-8" onClick={() => handleClick(l._id)}>
           <a className="nav-link" href={l.url} target="_blank">
@@ -86,23 +98,24 @@ const Home = ({ categories }) => {
       </Link>
     ));
   return (
-    <Layout>
-      <div className="row">
-        <div className="col-md-12">
-          <h1 className="font-weight-bold">Browse Tutorials/Courses</h1>
-          <br />
+    <Fragment>
+      {head()}
+      <Layout>
+        <div className="row">
+          <div className="col-md-12">
+            <h1 className="font-weight-bold">Browse Tutorials/Courses</h1>
+            <br />
+          </div>
         </div>
-      </div>
 
-      <div className="row">{listCategories()}</div>
+        <div className="row">{listCategories()}</div>
 
-      <div className="row pt-5">
-        <h2 className="font-weight-bold pb-3">Trending</h2>
-        <div className="col-md-12 overflow-hidden">
-          {listOfLinks()}
+        <div className="row pt-5">
+          <h2 className="font-weight-bold pb-3">Trending</h2>
+          <div className="col-md-12 overflow-hidden">{listOfLinks()}</div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </Fragment>
   );
 };
 
