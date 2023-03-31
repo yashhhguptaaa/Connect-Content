@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
-    "start": "node server.js",
-    "watch":"nodemon server.js"
+    "start": "node index.js",
+    "watch":"nodemon index.js"
   },
   "keywords": [],
   "author": "",
