@@ -24,10 +24,13 @@ const linkRoutes = require("./routes/link");
 //app middlewares
 app.use(morgan("dev"));
 // app.use(bodyParser.json());
-app.use(bodyParser.json({limit: '5mb', type: 'application/json'}));
+app.use(bodyParser.json({ limit: "5mb", type: "application/json" }));
 // app.use(cors())
 app.use(cors({ origin: process.env.CLIENT_URL }));
 
+app.get("/", (req, res) => {
+  res.send("Hello from connect-content-api");
+});
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
