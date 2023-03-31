@@ -13,7 +13,8 @@
 </ul>
 
 
-## [🖇Deployed Link](https://connect-content-app.vercel.app/)
+## [🖇Deployed Application Link](https://connect-content-app.vercel.app/)
+## [🖇Application API Link](https://connect-content-api.vercel.app/)
 
 
 
