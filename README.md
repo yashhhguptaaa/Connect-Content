@@ -30,6 +30,10 @@ Connect Content is an application for Content Discovery and Promotion.
 - Bootstrap
 - React-infinite scrollar
 
+## Test Credentials
+Email ID:- yash3144@gmail.com
+Password:- test@1234
+
 ## 📍Features Implemented
 
 ### 🔏 LOGIN/REGISTER 
@@ -47,8 +51,56 @@ Connect Content is an application for Content Discovery and Promotion.
 <li>In the event that a user forgets their password, fear not, for a magnificent feature is in place to rescue them from the depths of despair.</li>
 <li> Through the incredible power of AWS SES (Simple Email Service), a sophisticated email is dispatched to the user's registered email address, containing all the information required to reset their password and regain access to their account.</li>
 <li>This process is executed with unparalleled efficiency and security, ensuring that the user's sensitive information is safeguarded at all times.</li>
-<li>So, marvel at the technological marvels that lie at the heart of this application, and rest assured that even in the darkest of times, the power of AWS SES will be at your beck and call to rescue you from any and all password-related predicaments.</li>
 </ul>
+
+### SUBMIT A LINK
+
+<ol>
+    <li>
+        Users can submit a link.
+        <ul>
+            <li>This means that users have the ability to input a URL for a resource they would like to share.</li>
+        </ul>
+    </li>
+    <li>
+        Users must select a category for the course.
+        <ul>
+            <li>Categories are predetermined by the admin and can include topics such as web development, blockchain, AI/ML, React.js, Python, and more</li>
+            <li>This ensures that resources are properly categorized and easy to find for other users.</li>
+        </ul>
+    </li>
+    <li>
+        Users must select the type of course, paid or free.
+        <ul>
+            <li>This is an important distinction for users who are interested in accessing resources that fit within their budget.</li>
+            <li>It also helps other users to understand the financial investment they may need to make in order to access the resource.</li>
+        </ul>
+    </li>
+    <li>
+        Users must select the medium for the resource, either video or document.
+        <ul>
+            <li>This refers to the format of the resource that the user is sharing, whether it is a video or document.</li>
+            <li>This is important for other users who may have a preference for the type of medium they would like to consume the content in.</li>
+        </ul>
+    </li>
+    <li>
+        Users can enter the title of the resource.
+        <ul>
+            <li>This allows users to provide a clear and concise title for the resource they are sharing, making it easy for others to understand what the resource is about.</li>
+        </ul>
+    </li>
+    <li>
+        Users can enter the link to the resource.
+        <ul>
+            <li>This is the most important part of the submission, as it provides the direct link to the resource that other users can access and utilize </li>
+        </ul>
+    </li>
+</ol>
+
+
+
+
+
 
 
 <div align="center">
