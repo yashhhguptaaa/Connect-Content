@@ -31,8 +31,11 @@ Connect Content is an application for Content Discovery and Promotion.
 - React-infinite scrollar
 
 ## Test Credentials
-Email ID:- yash3144@gmail.com
-Password:- test@1234
+<ul>
+    Admin Credentials
+    <li>Email ID:- yash3144@gmail.com</li>
+    <li>Password:- test@1234</li>
+</ul>
 
 ## 📍Features Implemented
 
@@ -55,7 +58,7 @@ Password:- test@1234
 
 ### SUBMIT A LINK
 
-<ol>
+<ul>
     <li>
         Users can submit a link.
         <ul>
@@ -95,7 +98,7 @@ Password:- test@1234
             <li>This is the most important part of the submission, as it provides the direct link to the resource that other users can access and utilize </li>
         </ul>
     </li>
-</ol>
+</ul>
 
 
 
