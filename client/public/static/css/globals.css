@@ -1,4 +1,27 @@
 * {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+    display: none;
+}
+
+.starts-with-spacing {
+    margin-top: 6rem !important;
+    margin-bottom: 2rem !important;
+}
+
+
+@media screen and (max-width: 768px) {
+    .starts-with-spacing {
+        margin-top: 2rem !important;
+    }
 }

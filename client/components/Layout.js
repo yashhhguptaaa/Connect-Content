@@ -4,6 +4,7 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import { isAuth, logout } from '../helpers/auth';
 import usePageScrollHook from '../customHooks/usePageScrollHook';
+import useDeviceType from '../customHooks/useDeviceType';
 import Image from 'next/image';
 import 'nprogress/nprogress.css';
 
@@ -13,6 +14,7 @@ Router.onRouteChangeError = (url) => NProgress.done();
 
 const Layout = ({ children }) => {
 	const scrolled = usePageScrollHook();
+	const { isMobile, isTabletOrDesktop } = useDeviceType();
 	const head = () => (
 		<React.Fragment>
 			<link
@@ -28,25 +30,47 @@ const Layout = ({ children }) => {
 			<link rel="stylesheet" href="/static/css/globals.css" />
 		</React.Fragment>
 	);
+
 	const nav = () => (
-		<div className={`fixed-top bg-warning px-5 ${scrolled ? ' py-1' : ' py-3'}`}>
+		<div
+			className={`fixed-top bg-warning  ${(() => {
+				if (isMobile) {
+					if (scrolled) {
+						return 'px-1 py-1';
+					}
+					return 'px-1 py-2';
+				} else {
+					if (scrolled) {
+						return 'px-5 py-1';
+					}
+					return 'px-5 py-3';
+				}
+			})()}`}
+		>
 			<ul className="nav">
 				<li className="d-flex align-items-center">
 					<Link href="/">
 						<a className="nav-link border-0">
-							<Image src="/static/images/connect-content-home-icon.svg" height={50} width={50} />
+							<Image
+								src="/static/images/connect-content-home-icon.svg"
+								height={isMobile ? 30 : 50}
+								width={isMobile ? 30 : 50}
+							/>
 						</a>
 					</Link>
 				</li>
-				{!scrolled && <li className="d-flex align-items-center">
-					<Link href="/">
-						<a className="nav-link border-0 text-dark">CONNECT-CONTENT</a>
-					</Link>
-				</li>}
+				{!scrolled &&
+				isTabletOrDesktop && (
+					<li className="d-flex align-items-center">
+						<Link href="/">
+							<a className="nav-link border-0 text-dark">CONNECT-CONTENT</a>
+						</Link>
+					</li>
+				)}
 
 				<li className="d-flex align-items-center">
 					<Link href="/user/link/create">
-						<a className="nav-link text-dark border-0">Submit a Link</a>
+						<a className="nav-link text-dark border-0">{isMobile ? 'Submit' : 'Submit a Link'}</a>
 					</Link>
 				</li>
 
@@ -71,7 +95,9 @@ const Layout = ({ children }) => {
 				isAuth().role === 'admin' && (
 					<li className="ms-auto d-flex align-items-center">
 						<Link href="/admin">
-							<a className="nav-link text-dark border-0">{isAuth().name}</a>
+							<a className="nav-link text-dark border-0">
+								{isMobile ? isAuth().name.substring(0, 4) + '..' : isAuth().name}
+							</a>
 						</Link>
 					</li>
 				)}

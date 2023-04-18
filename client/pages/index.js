@@ -3,11 +3,14 @@ import Layout from '../components/Layout';
 import axios from 'axios';
 import { API, APP_NAME } from '../config';
 import Link from 'next/link';
+import Image from 'next/image';
 import moment from 'moment';
 import Head from 'next/head';
+import useDeviceType from '../customHooks/useDeviceType';
 
 const Home = ({ categories }) => {
 	const [ popular, setPopular ] = useState([]);
+	const { isMobile } = useDeviceType();
 
 	const head = () => (
 		<Head>
@@ -92,9 +95,32 @@ const Home = ({ categories }) => {
 		<Fragment>
 			{head()}
 			<Layout>
-				<div className="row">
-					<div className="col-md-12">
-						<h1 className="font-weight-bold">Browse Tutorials/Courses</h1>
+				<div className="row starts-with-spacing">
+					<div className="col-md-12 position-relative d-flex justify-content-center">
+						<div className="d-inline">
+							<Image
+								src="/static/images/old-paper-home-img.png"
+								style={{ transform: 'rotate(0deg)' }}
+								alt="Old Paper Home Icon"
+								height={220}
+								width={500}
+							/>
+						</div>
+						<div className="position-absolute" style={{ top: isMobile ? 30 : 60 }}>
+							<h1 className="font-weight-bold d-flex justify-content-center">
+								<span className="d-inline-block">CONNECT CONTENT</span>
+							</h1>
+							<p className=" mb-0 d-flex justify-content-center">
+								<span className="d-inline-block" style={{ fontSize: isMobile ? '0.75rem' : '1rem' }}>
+									THE LARGEST TECHNICAL CONTENT DIRECTORY,{' '}
+								</span>
+							</p>
+							<p className="d-flex justify-content-center">
+								<span className="d-inline-block" style={{ fontSize: isMobile ? '0.75rem' : '1rem' }}>
+									CURATED BY DEVELOPERS FOR DEVELOPERS <b>!</b>
+								</span>
+							</p>
+						</div>
 						<br />
 					</div>
 				</div>
