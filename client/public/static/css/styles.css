@@ -1,7 +1,11 @@
-#nprogress .bar{
-    height : 4px !important;
+#nprogress .bar {
+    height: 4px !important;
 }
 
 .nav a:hover {
     border-radius: 0px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-radius: 0px !important;
 }

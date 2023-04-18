@@ -1,91 +1,107 @@
-import Head from "next/head";
-import Link from "next/link";
-import React from "react";
-import Router from "next/router";
-import NProgress from "nprogress";
-import { isAuth, logout } from "../helpers/auth";
-import "nprogress/nprogress.css";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import { isAuth, logout } from '../helpers/auth';
+import usePageScrollHook from '../customHooks/usePageScrollHook';
+import Image from 'next/image';
+import 'nprogress/nprogress.css';
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
 
 const Layout = ({ children }) => {
-  const head = () => (
-    <React.Fragment>
-      <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-        crossOrigin="anonymous"
-      />
-      <link rel="stylesheet" href="/static/css/styles.css" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
+	const scrolled = usePageScrollHook();
+	const head = () => (
+		<React.Fragment>
+			<link
+				href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+				rel="stylesheet"
+				integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+				crossOrigin="anonymous"
+			/>
+			<link rel="stylesheet" href="/static/css/styles.css" />
+			<link rel="preconnect" href="https://fonts.googleapis.com" />
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
 			<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
-      <link rel="stylesheet" href="/static/css/globals.css" />
-    </React.Fragment>
-  );
+			<link rel="stylesheet" href="/static/css/globals.css" />
+		</React.Fragment>
+	);
+	const nav = () => (
+		<div className={`fixed-top bg-warning px-5 ${scrolled ? ' py-1' : ' py-3'}`}>
+			<ul className="nav">
+				<li className="d-flex align-items-center">
+					<Link href="/">
+						<a className="nav-link border-0">
+							<Image src="/static/images/connect-content-home-icon.svg" height={50} width={50} />
+						</a>
+					</Link>
+				</li>
+				{!scrolled && <li className="d-flex align-items-center">
+					<Link href="/">
+						<a className="nav-link border-0 text-dark">CONNECT-CONTENT</a>
+					</Link>
+				</li>}
 
-  const nav = () => (
-    <ul className="nav nav-tabs bg-warning">
-      <li className="nav-item ">
-        <Link href="/">
-          <a className="nav-link text-dark">Home</a>
-        </Link>
-      </li>
+				<li className="d-flex align-items-center">
+					<Link href="/user/link/create">
+						<a className="nav-link text-dark border-0">Submit a Link</a>
+					</Link>
+				</li>
 
-      <li className="nav-item">
-        <Link href="/user/link/create">
-          <a className="nav-link text-dark">Submit a Link</a>
-        </Link>
-      </li>
+				{process.browser &&
+				!isAuth() && (
+					<React.Fragment>
+						<li className="d-flex align-items-center">
+							<Link href="/login">
+								<a className="nav-link text-dark border-0">Login</a>
+							</Link>
+						</li>
+						<li className="d-flex align-items-center">
+							<Link href="/register">
+								<a className="nav-link text-dark border-0">Register</a>
+							</Link>
+						</li>
+					</React.Fragment>
+				)}
 
-      {process.browser && !isAuth() && (
-        <React.Fragment>
-          <li className="nav-item">
-            <Link href="/login">
-              <a className="nav-link text-dark">Login</a>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link href="/register">
-              <a className="nav-link text-dark">Register</a>
-            </Link>
-          </li>
-        </React.Fragment>
-      )}
-
-      {process.browser && isAuth() && isAuth().role === "admin" && (
-        <li className="nav-item ms-auto">
-          <Link href="/admin">
-            <a className="nav-link text-dark">{isAuth().name}</a>
-          </Link>
-        </li>
-      )}
-      {process.browser && isAuth() && isAuth().role === "subscriber" && (
-        <li className="nav-item ms-auto">
-          <Link href="/user">
-            <a className="nav-link text-dark">{isAuth().name}</a>
-          </Link>
-        </li>
-      )}
-      {process.browser && isAuth() && (
-        <li className="nav-item">
-          <a className="nav-link text-dark" onClick={logout}>
-            Logout
-          </a>
-        </li>
-      )}
-    </ul>
-  );
-  return (
-    <React.Fragment>
-      {head()}
-      {nav()}
-      <div className="container pt-5 pb-5">{children}</div>
-    </React.Fragment>
-  );
+				{process.browser &&
+				isAuth() &&
+				isAuth().role === 'admin' && (
+					<li className="ms-auto d-flex align-items-center">
+						<Link href="/admin">
+							<a className="nav-link text-dark border-0">{isAuth().name}</a>
+						</Link>
+					</li>
+				)}
+				{process.browser &&
+				isAuth() &&
+				isAuth().role === 'subscriber' && (
+					<li className="ms-auto d-flex align-items-center">
+						<Link href="/user">
+							<a className="nav-link text-dark border-0">{isAuth().name}</a>
+						</Link>
+					</li>
+				)}
+				{process.browser &&
+				isAuth() && (
+					<li className="d-flex align-items-center">
+						<a className="nav-link text-dark border-0" onClick={logout}>
+							Logout
+						</a>
+					</li>
+				)}
+			</ul>
+		</div>
+	);
+	return (
+		<React.Fragment>
+			{head()}
+			{nav()}
+			<div className="container pt-5 pb-5">{children}</div>
+		</React.Fragment>
+	);
 };
 
 export default Layout;
