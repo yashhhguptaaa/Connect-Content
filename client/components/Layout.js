@@ -33,7 +33,11 @@ const Layout = ({ children }) => {
 
 	const nav = () => (
 		<div
-			className={`fixed-top bg-warning  ${(() => {
+			style={{
+				backgroundColor: '#FFFFFF',
+				boxShadow: scrolled ? '0px 0px 11px -2px black' : 'none',
+			}}
+			className={`fixed-top  ${(() => {
 				if (isMobile) {
 					if (scrolled) {
 						return 'px-1 py-1';
