@@ -14,7 +14,7 @@ const Home = ({ categories }) => {
 
 	const head = () => (
 		<Head>
-			<link rel="shortcut icon" href="/static/images/connect-content-web-icon.svg" />
+			<link rel="shortcut icon" href="/static/images/old-paper.png" />
 			<title>{APP_NAME}</title>
 			<meta name="description" content="all tech categories and popular links" />
 		</Head>
