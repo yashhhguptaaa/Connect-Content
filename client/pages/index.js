@@ -71,25 +71,34 @@ const Home = ({ categories }) => {
 
 	const listCategories = () =>
 		categories.map((c, i) => (
-			<Link href={`/links/${c.slug}`}>
-				<a style={{ border: '1px solid red' }} className="bg-light p-3 col-md-4 text-decoration-none">
-					<div>
-						<div className="d-flex row">
-							<div className="col-md-4">
+			<div className="mx-auto">
+				<Link href={`/links/${c.slug}`}>
+					<a className="bg-light p-3 d-inline text-decoration-none m-2">
+						<div className="position-relative d-inline">
+							<div className="category-img-container">
 								<img
 									src={c.image && c.image.url}
 									alt={c.name}
-									style={{ width: '100px', height: 'auto' }}
-									className="px-3"
+									width={isMobile ? 300 : 400}
+									height={isMobile ? 150 : 250}
+									className="category-img"
 								/>
 							</div>
-							<div className="col-md-8 ">
-								<h3>{c.name}</h3>
-							</div>
+							<button
+								className="position-absolute category-button fw-bold"
+								style={{
+									bottom: 18,
+									width: isMobile ? 300 : 400,
+									height: isMobile ? 30 : 50,
+									opacity: isMobile && 1,
+								}}
+							>
+								{c.name}
+							</button>
 						</div>
-					</div>
-				</a>
-			</Link>
+					</a>
+				</Link>
+			</div>
 		));
 	return (
 		<Fragment>
@@ -125,7 +134,7 @@ const Home = ({ categories }) => {
 					</div>
 				</div>
 
-				<div className="row">{listCategories()}</div>
+				<div className="d-flex flex-wrap">{listCategories()}</div>
 
 				<div className="row pt-5">
 					<h2 className="font-weight-bold pb-3">Trending</h2>

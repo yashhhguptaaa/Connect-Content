@@ -56,7 +56,6 @@ const Layout = ({ children }) => {
 					<Link href="/">
 						<a className="nav-link border-0">
 							<Image
-								// src="/static/images/connect-content-home-icon.svg"
 								src="/static/images/old-paper.png"
 								height={isMobile ? 30 : 50}
 								width={isMobile ? 30 : 50}
