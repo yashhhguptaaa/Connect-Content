@@ -29,6 +29,7 @@ const categorySchema = new mongoose.Schema(
       ref: 'User',
     },
   },
+  
   { timestamps: true }
 );
 
