@@ -9,6 +9,7 @@ const linkSchema = new mongoose.Schema(
       required: true,
       max: 256,
     },
+    
     url: {
       type: String,
       trim: true,
