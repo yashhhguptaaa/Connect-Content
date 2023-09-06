@@ -27,6 +27,7 @@ exports.resetPasswordValidator = [
   check("resetPasswordLink").not().isEmpty().withMessage("Token is required"),
 ];
 
+
 exports.userUpdateValidator = [
   check("name").not().isEmpty().withMessage("Name is required"),
 ];
