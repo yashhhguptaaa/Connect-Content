@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const expressJwt = require('express-jwt')
 
-
 // Validators
 const {
     categoryCreateValidator,
